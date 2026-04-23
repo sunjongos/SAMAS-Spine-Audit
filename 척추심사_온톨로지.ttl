@@ -1,0 +1,36 @@
+@prefix ndb: <http://ndb.hospital/ontology/spine#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Classes
+ndb:SurgeryCode rdf:type owl:Class .
+ndb:Requirement rdf:type owl:Class .
+ndb:Standard rdf:type owl:Class .
+ndb:ClinicalFinding rdf:type owl:Class ; rdfs:subClassOf ndb:Requirement .
+ndb:ImageFinding rdf:type owl:Class ; rdfs:subClassOf ndb:Requirement .
+ndb:TreatmentHistory rdf:type owl:Class ; rdfs:subClassOf ndb:Requirement .
+
+# Surgery Codes
+ndb:N1493 rdf:type ndb:SurgeryCode ; rdfs:label "추간판절제술" .
+ndb:N1499 rdf:type ndb:SurgeryCode ; rdfs:label "요추후궁절제술" .
+ndb:N2470 rdf:type ndb:SurgeryCode ; rdfs:label "TLIF 유합술" .
+ndb:자46 rdf:type ndb:SurgeryCode ; rdfs:label "척추고정술" .
+
+# Requirements
+ndb:VAS rdf:type ndb:ClinicalFinding ; rdfs:label "통증 강도" .
+ndb:MotorGrade rdf:type ndb:ClinicalFinding ; rdfs:label "근력 저하" .
+ndb:Claudication rdf:type ndb:ClinicalFinding ; rdfs:label "간헐적 파행" .
+ndb:MRI rdf:type ndb:ImageFinding ; rdfs:label "MRI 소견" .
+ndb:NerveCompression rdf:type ndb:ImageFinding ; rdfs:label "신경 압박" .
+ndb:ConservativeTx rdf:type ndb:TreatmentHistory ; rdfs:label "보존적 치료" .
+
+# Relationships
+ndb:N1493 ndb:requires ndb:VAS, ndb:MotorGrade, ndb:MRI, ndb:NerveCompression, ndb:ConservativeTx .
+ndb:N1499 ndb:requires ndb:Claudication, ndb:MRI, ndb:ConservativeTx .
+ndb:N2470 ndb:requires ndb:ConservativeTx, ndb:MRI, ndb:MotorGrade .
+ndb:자46 ndb:requires ndb:MRI .
+
+# Logic constraints
+ndb:N2470 ndb:hasSpecificConstraint "최근 1년 3개월 보존치료" .
+ndb:자46 ndb:hasSpecificConstraint "시상면 전위 4mm 이상" .
