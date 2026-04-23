@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMAS - 하이엔드 보험심사 보고서</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --card-bg: rgba(31, 41, 55, 0.5);
+            --primary: #38bdf8;
+            --accent: #818cf8;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --text-main: #f9fafb;
+            --text-dim: #9ca3af;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #030712 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .opinion-letter {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            line-height: 1.8;
+            font-size: 1.15rem;
+            color: #d1d5db;
+            border-left: 5px solid var(--primary);
+        }
+
+        .highlight { color: var(--primary); font-weight: 600; }
+        .critical { color: var(--danger); font-weight: 700; text-decoration: underline; }
+
+        .score-box {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.1) 100%);
+            border-radius: 24px;
+            border: 1px solid var(--success);
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--success);
+            margin: 10px 0;
+        }
+
+        .mermaid {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .research-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .research-item::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .btn-action {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--primary);
+            color: #000;
+            padding: 18px 36px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-action:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 30px 60px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-copy {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .risk-checker {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .check-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .check-item input { margin-right: 10px; }
+        .points { font-size: 0.8rem; color: var(--primary); font-weight: 700; }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>SAMAS REPORT</h1>
+            <p>Advanced Spine Audit Multi-Agent System | Case #2026-N1499-01</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="badge">Defense Tactics v2.0</div>
+                <h2>📝 삭감 방어용 전문 소견서</h2>
+                <div class="opinion-letter" id="opinionText">
+                    <strong>[진단명]</strong> 요추 제2-3추간판 탈출증 및 척추관 협착증 (L2-3 HNP & Stenosis)<br>
+                    <strong>[수술명]</strong> 요추 후궁절제술 및 미세 감압술 (N1499)<br><br>
+
+                    본 환자는 2025년 여름부터 지속된 극심한 하지 방사통(<span class="highlight">VAS 8</span>) 및 하지 위약감으로 지속적인 약물치료 및 주사치료 등의 <span class="highlight">적극적인 보존적 치료(Active Conservative Treatment)</span>를 시행하였으나, 증상 호전 없이 최근 급격한 악화 소견을 보였습니다.<br><br>
+
+                    내원 당시 신체 검진상 <span class="critical">우측 하지 근력이 Grade 3</span>로 저하되어 있었고, 감각 저하(정상의 20% 수준) 및 <span class="critical">소대변 장애를 동반한 보행 장애</span> 등 중증의 신경학적 결손이 명확히 확인되었습니다. 이는 마미증후군(Cauda Equina Syndrome)을 시사하는 응급 상황으로 판단되었습니다.<br><br>
+
+                    <span class="highlight">2026년 3월 31일</span> 시행한 요추 MRI 검사 결과, 요추 제2-3분절의 중증 척추관 협착 및 추간판 탈출로 인한 강력한 신경 압박(Nerve root & Dural sac compression)이 확인되었습니다. <br><br>
+                    
+                    이에 환자의 임상 증상과 영상학적 소견이 해부학적으로 100% 일치(<span class="highlight">Clinical Correlation</span>)하며, 보존적 치료에 반응하지 않는 진행성 신경 마비 및 기능 장애를 해결하기 위해 <span class="highlight">2026년 4월 23일</span> 후궁절제술 및 미세 감압술(N1499)을 시행하였습니다. 수술 후 신경근의 충분한 감압을 확인하였으며, 증상 완화 및 기능 회복을 위해 본 수술은 반드시 필요한 조치였습니다.
+                </div>
+                <button class="btn-copy" onclick="copyToClipboard()">📋 소견서 복사하기</button>
+            </div>
+
+            <div class="card">
+                <div class="badge">Harness Audit Tool</div>
+                <h2>🛡️ 리스크 자가 진단</h2>
+                <div class="risk-checker">
+                    <label class="check-item"><input type="checkbox" checked onchange="updateScore()"> 보존적 치료 기간 (3개월↑) <span class="points">+20</span></label>
+                    <label class="check-item"><input type="checkbox" checked onchange="updateScore()"> 진행성 근력 저하 (Grade 3↓) <span class="points">+30</span></label>
+                    <label class="check-item"><input type="checkbox" checked onchange="updateScore()"> 배뇨/배변 장애 소견 <span class="points">+20</span></label>
+                    <label class="check-item"><input type="checkbox" checked onchange="updateScore()"> 영상-임상 해부학적 일치 <span class="points">+20</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="updateScore()"> 타 병원 진료 의뢰서 확보 <span class="points">+10</span></label>
+                </div>
+                <div class="score-box" style="margin-top: 20px;">
+                    <div style="font-size: 0.9rem; color: var(--text-dim);">Defense Score</div>
+                    <div class="score-value" id="scoreValue">90%</div>
+                    <div id="scoreLabel" style="font-weight: 700; color: var(--success);">매우 안전함</div>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="badge">Knowledge Graph</div>
+                <h2>🧠 온톨로지 지식 그래프 추론 근거</h2>
+                <div class="mermaid">
+                    graph LR
+                        Patient[환자 사례] --> |Match| N1499[요추후궁절제술]
+                        N1499 --> |Logic 1| Emergency[응급 적응증: MMT 3/소대변장애]
+                        N1499 --> |Logic 2| Cons[8개월 적극적 보존치료]
+                        N1499 --> |Logic 3| Correlation[영상-임상 100% 일치]
+                        
+                        Emergency --> |HIRA Rule| Success((삭감 방어 성공))
+                        Cons --> |HIRA Rule| Success
+                        Correlation --> |HIRA Rule| Success
+                        
+                        style N1499 fill:#38bdf8,stroke:#fff,color:#fff
+                        style Success fill:#10b981,stroke:#fff,color:#fff
+                        style Emergency fill:#f43f5e,color:#fff
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="badge">2026 Audit Trends</div>
+                <h2>🔍 자율 연구(Auto-Research) 기반 개선점</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div class="research-item"><strong>성과 중심 평가 대응:</strong> 수술 전후 VAS 비교 및 기능 회복 지표를 소견서 전면에 배치하여 '의학적 성과' 강조.</div>
+                        <div class="research-item"><strong>보존적 치료 구체화:</strong> 단순 횟수 기술이 아닌 '약제 종류'와 '치료 기간'을 고시 번호와 매핑하여 공신력 강화.</div>
+                    </div>
+                    <div>
+                        <div class="research-item"><strong>판례 기반 변론:</strong> 심평원 기준을 넘어 "의사의 임상적 판단의 타당성"을 강조하는 법적 방어 논리 보강.</div>
+                        <div class="research-item"><strong>영상 판독 정밀도:</strong> 척추관 침습률(Invasion %) 등 수치화된 영상 데이터를 온톨로지에 추가하여 객관성 확보.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p style="text-align: center; color: #4b5563; margin-top: 40px;">&copy; 2026 NDB AI Strategy Group. Powered by SAMAS Multi-Agent System.</p>
+        </footer>
+    </div>
+
+    <button class="btn-action" onclick="window.print()">📄 보고서 PDF 출력 / 보관</button>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+
+        function copyToClipboard() {
+            const text = document.getElementById('opinionText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('소견서가 클립보드에 복사되었습니다. (Ctrl+V로 사용하세요)');
+            });
+        }
+
+        function updateScore() {
+            const checks = document.querySelectorAll('.risk-checker input');
+            let score = 0;
+            const points = [20, 30, 20, 20, 10];
+            
+            checks.forEach((check, index) => {
+                if (check.checked) score += points[index];
+            });
+
+            document.getElementById('scoreValue').innerText = score + '%';
+            
+            const label = document.getElementById('scoreLabel');
+            if (score >= 90) {
+                label.innerText = '매우 안전함';
+                label.style.color = '#10b981';
+            } else if (score >= 70) {
+                label.innerText = '안전함';
+                label.style.color = '#38bdf8';
+            } else {
+                label.innerText = '주의 필요';
+                label.style.color = '#f43f5e';
+            }
+        }
+    </script>
+</body>
+</html>
